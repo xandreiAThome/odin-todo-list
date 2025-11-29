@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+/* .inter-font {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+} */
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --primary-rgb: 21, 129, 191;
+  --secondary-rgb: 93, 26, 26;
+  --text-dark-rgb: 233, 227, 240;
+  --background-rgb: 18, 10, 28;
+  --accent-rgb: 255, 108, 12;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: rgb(var(--background-rgb));
+  color: rgb(var(--text-dark-rgb));
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+}
+
+header {
+  display: flex;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(var(--text-dark-rgb), 0.5);
+}
+
+header > img {
+  height: 15px;
+  width: 29px;
+}
+
+header > h1 {
+  font-size: large;
+  font-style: italic;
+}
