@@ -2,7 +2,6 @@ import IoTodayOutline from "../../public/IoTodayOutline.svg";
 import BsCalendar2Week from "../../public/BsCalendar2Week.svg";
 import BiNote from "../../public/BiNote.svg";
 import ShowTaskPage from "./tasks";
-import ShowWeekPage from "./week";
 import ShowNotesPage from "./notes";
 
 export default function SideBar() {
@@ -21,6 +20,7 @@ export default function SideBar() {
   todayNav.addEventListener("click", () => {
     updateActiveNav("today-nav");
     ShowTaskPage();
+    closeSidebarOnMobile();
   });
 
   const weekNav = document.createElement("button");
@@ -34,7 +34,8 @@ export default function SideBar() {
   weekNav.appendChild(weekText);
   weekNav.addEventListener("click", () => {
     updateActiveNav("week-nav");
-    ShowWeekPage();
+    ShowTaskPage("week");
+    closeSidebarOnMobile();
   });
 
   const notesNav = document.createElement("button");
@@ -49,6 +50,7 @@ export default function SideBar() {
   notesNav.addEventListener("click", () => {
     updateActiveNav("notes-nav");
     ShowNotesPage();
+    closeSidebarOnMobile();
   });
 
   function updateActiveNav(activeId) {
@@ -56,6 +58,13 @@ export default function SideBar() {
       item.classList.remove("active-nav-item");
     });
     document.getElementById(activeId).classList.add("active-nav-item");
+  }
+
+  function closeSidebarOnMobile() {
+    if (window.innerWidth < 1024) {
+      sidebar.classList.remove("open");
+      document.querySelector(".sidebar-overlay")?.classList.remove("active");
+    }
   }
 
   const line = document.createElement("div");

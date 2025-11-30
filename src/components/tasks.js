@@ -1,13 +1,31 @@
-import { format } from "date-fns";
+import {
+  format,
+  addDays,
+  startOfWeek,
+  isToday,
+  isWithinInterval,
+} from "date-fns";
 import BsThreeDotsVertical from "../../public/BsThreeDotsVertical.svg";
 import LuAlarmClock from "../../public/LuAlarmClock.svg";
+import { CreateTaskModal } from "./modal";
+import TaskServce from "../service/task.service.js";
 
-export function TaskPageHeader() {
+export function TaskPageHeader(pageType = "today") {
   const headerContainer = document.createElement("div");
   headerContainer.className = "task-header";
 
   const headerText = document.createElement("h4");
-  headerText.textContent = `Today (${format(new Date(), "MMM d, yyyy")})`;
+
+  if (pageType === "week") {
+    const startDate = startOfWeek(new Date());
+    const endDate = addDays(startDate, 6);
+    headerText.textContent = `This Week (${format(
+      startDate,
+      "MMM d"
+    )} - ${format(endDate, "MMM d, yyyy")})`;
+  } else {
+    headerText.textContent = `Today (${format(new Date(), "MMM d, yyyy")})`;
+  }
 
   const actionButton = document.createElement("button");
   actionButton.id = "action-btn";
@@ -66,10 +84,46 @@ export function TaskItem(priority, titleText, deadline, id) {
   return task;
 }
 
-export default function ShowTaskPage() {
+export default function ShowTaskPage(pageType = "today") {
   const main = document.getElementById("main-content");
+  const header = TaskPageHeader(pageType);
+  const taskService = TaskServce();
+
+  const actionBtn = header.querySelector("#action-btn");
+  actionBtn.addEventListener("click", () => {
+    const modal = CreateTaskModal(
+      (taskData) => {
+        taskService.addTask(taskData);
+        modal.remove();
+        ShowTaskPage(pageType);
+      },
+      () => {
+        modal.remove();
+      }
+    );
+    document.body.appendChild(modal);
+  });
+
+  let tasks = taskService.getTasks();
+
+  // Filter tasks based on page type
+  if (pageType === "today") {
+    tasks = tasks.filter((t) => t.deadline && isToday(new Date(t.deadline)));
+  } else if (pageType === "week") {
+    const startDate = startOfWeek(new Date());
+    const endDate = addDays(startDate, 6);
+    tasks = tasks.filter(
+      (t) =>
+        t.deadline &&
+        isWithinInterval(new Date(t.deadline), {
+          start: startDate,
+          end: endDate,
+        })
+    );
+  }
+
   main.replaceChildren(
-    TaskPageHeader(),
-    TaskItem("high", "Sample Task", new Date().toISOString(), "task-1")
+    header,
+    ...tasks.map((t) => TaskItem(t.priority, t.title, t.deadline, t.id))
   );
 }
