@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import LuAlarmClock from "../../../public/LuAlarmClock.svg";
+import ProjectService from "../../service/project.service.js";
 
 export function CreateTaskDetailModal(
   task,
@@ -66,10 +67,13 @@ export function CreateTaskDetailModal(
     task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
 
   // Project badge
+  const projectService = ProjectService();
+  const projects = projectService.getProjects();
+  const projectName =
+    projects.find((p) => p.id === task.project)?.name || task.project;
   const projectBadge = document.createElement("div");
   projectBadge.className = "detail-badge project-badge";
-  projectBadge.textContent =
-    task.project.charAt(0).toUpperCase() + task.project.slice(1);
+  projectBadge.textContent = projectName;
 
   // Status badge
   const statusBadge = document.createElement("div");

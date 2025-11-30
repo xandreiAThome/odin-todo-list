@@ -5,7 +5,6 @@ import {
   isToday,
   isWithinInterval,
 } from "date-fns";
-import BsThreeDotsVertical from "../../../public/BsThreeDotsVertical.svg";
 import LuAlarmClock from "../../../public/LuAlarmClock.svg";
 import { CreateTaskModal } from "../modals/createTaskModal.js";
 import { CreateTaskDetailModal } from "../modals/taskDetailModal";
@@ -142,6 +141,14 @@ export default function ShowTaskPage(pageType = "today") {
   const header = TaskPageHeader(pageType);
   const taskService = TaskServce();
 
+  const renderTask = () => {
+    // Close any open modals
+    const modals = document.querySelectorAll(".modal-overlay");
+    modals.forEach((modal) => modal.remove());
+    // Refresh the page
+    ShowTaskPage(pageType);
+  };
+
   const actionBtn = header.querySelector("#action-btn");
   actionBtn.addEventListener("click", () => {
     const modal = CreateTaskModal(
@@ -186,14 +193,16 @@ export default function ShowTaskPage(pageType = "today") {
         pageType,
         t.done,
         t,
-        () => {
-          // Close any open modals
-          const modals = document.querySelectorAll(".modal-overlay");
-          modals.forEach((modal) => modal.remove());
-          // Refresh the page
-          ShowTaskPage(pageType);
-        }
+        renderTask
       )
     )
   );
+}
+
+function renderTask() {
+  // Close any open modals
+  const modals = document.querySelectorAll(".modal-overlay");
+  modals.forEach((modal) => modal.remove());
+  // Refresh the page
+  ShowTaskPage(pageType);
 }

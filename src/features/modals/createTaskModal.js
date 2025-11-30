@@ -1,4 +1,5 @@
 import flatpickr from "flatpickr";
+import ProjectService from "../../service/project.service.js";
 
 export function CreateTaskModal(onSubmit, onCancel) {
   const modalOverlay = document.createElement("div");
@@ -46,11 +47,12 @@ export function CreateTaskModal(onSubmit, onCancel) {
   projectLabel.textContent = "Project";
   const projectSelect = document.createElement("select");
   projectSelect.required = true;
-  const projects = ["Personal", "Work", "Shopping"];
+  const projectService = ProjectService();
+  const projects = projectService.getProjects();
   projects.forEach((project) => {
     const option = document.createElement("option");
-    option.value = project.toLowerCase();
-    option.textContent = project;
+    option.value = project.id;
+    option.textContent = project.name;
     projectSelect.appendChild(option);
   });
 
@@ -120,7 +122,7 @@ export function CreateTaskModal(onSubmit, onCancel) {
   const contentTextarea = document.createElement("textarea");
   contentTextarea.placeholder = "Enter task content";
   contentTextarea.className = "modal-textarea";
-  contentTextarea.required = true;
+  contentTextarea.required = false;
 
   const buttonContainer = document.createElement("div");
   buttonContainer.className = "modal-buttons";
