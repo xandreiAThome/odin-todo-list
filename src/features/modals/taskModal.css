@@ -1,0 +1,208 @@
+/* Task Creation Modal Form Styles */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-form label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: rgb(var(--text-dark-rgb));
+}
+
+.modal-form input,
+.modal-form select {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: rgb(var(--text-dark-rgb));
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.modal-textarea {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: rgb(var(--text-dark-rgb));
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.modal-textarea::placeholder {
+  color: rgba(var(--text-dark-rgb), 0.5);
+}
+
+.modal-textarea:focus {
+  outline: none;
+  border-color: rgb(var(--primary-rgb));
+  background-color: rgba(var(--text-dark-rgb), 0.15);
+}
+
+.modal-form select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='rgb(233,227,240)' d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.modal-form input::placeholder {
+  color: rgba(var(--text-dark-rgb), 0.5);
+}
+
+.modal-form input:focus,
+.modal-form select:focus {
+  outline: none;
+  border-color: rgb(var(--primary-rgb));
+  background-color: rgba(var(--text-dark-rgb), 0.15);
+}
+
+.deadline-container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.deadline-container input {
+  flex: 1;
+}
+
+.priority-project-container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: rgb(var(--text-dark-rgb));
+}
+
+.form-group select {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: rgb(var(--text-dark-rgb));
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.modal-submit,
+.modal-cancel {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.modal-submit {
+  background-color: rgb(var(--primary-rgb));
+  color: rgb(var(--text-dark-rgb));
+}
+
+.modal-submit:hover {
+  background-color: rgba(var(--primary-rgb), 0.8);
+}
+
+.modal-cancel {
+  background-color: rgba(var(--text-dark-rgb), 0.2);
+  color: rgb(var(--text-dark-rgb));
+}
+
+.modal-cancel:hover {
+  background-color: rgba(var(--text-dark-rgb), 0.3);
+}
+
+/* Date/Time Input Calendar Icon */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* Flatpickr Theme Customization */
+.flatpickr-calendar {
+  background-color: rgb(var(--background-rgb));
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+}
+
+.flatpickr-current-month {
+  background-color: rgb(var(--background-rgb));
+  color: rgb(var(--text-dark-rgb));
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  color: rgb(var(--text-dark-rgb));
+}
+
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+}
+
+.flatpickr-time input {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+  color: rgb(var(--text-dark-rgb));
+}
+
+.flatpickr-time input:focus {
+  background-color: rgba(var(--text-dark-rgb), 0.15);
+  border-color: rgb(var(--primary-rgb));
+  outline: none;
+}
+
+.flatpickr-weekday {
+  background-color: rgb(var(--background-rgb));
+  color: rgb(var(--text-dark-rgb));
+}
+
+.flatpickr-day {
+  color: rgb(var(--text-dark-rgb));
+}
+
+.flatpickr-day:hover,
+.flatpickr-day.prevMonthDay:hover,
+.flatpickr-day.nextMonthDay:hover,
+.flatpickr-day.disabled:hover,
+.flatpickr-day.disabled.prevMonthDay:hover,
+.flatpickr-day.disabled.nextMonthDay:hover {
+  background-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay {
+  background-color: rgb(var(--primary-rgb));
+  border-color: rgb(var(--primary-rgb));
+}

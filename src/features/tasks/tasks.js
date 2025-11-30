@@ -5,10 +5,11 @@ import {
   isToday,
   isWithinInterval,
 } from "date-fns";
-import BsThreeDotsVertical from "../../public/BsThreeDotsVertical.svg";
-import LuAlarmClock from "../../public/LuAlarmClock.svg";
-import { CreateTaskModal } from "./modal";
-import TaskServce from "../service/task.service.js";
+import BsThreeDotsVertical from "../../../public/BsThreeDotsVertical.svg";
+import LuAlarmClock from "../../../public/LuAlarmClock.svg";
+import { CreateTaskModal } from "../modals/createTaskModal.js";
+import { CreateTaskDetailModal } from "../modals/taskDetailModal";
+import TaskServce from "../../service/task.service.js";
 
 export function TaskPageHeader(pageType = "today") {
   const headerContainer = document.createElement("div");
@@ -36,10 +37,26 @@ export function TaskPageHeader(pageType = "today") {
   return headerContainer;
 }
 
-export function TaskItem(priority, titleText, deadline, id) {
+export function TaskItem(
+  priority,
+  titleText,
+  deadline,
+  id,
+  pageType = "today",
+  done = false,
+  taskObject = null,
+  onTaskUpdate = null
+) {
   const task = document.createElement("div");
   task.classList = "task-item";
   task.id = id;
+  task.style.cursor = "pointer";
+  const taskService = TaskServce();
+
+  if (done) {
+    task.classList.add("task-done");
+  }
+
   if (priority === "high") {
     task.classList.add("high-prio");
   } else if (priority === "medium") {
@@ -53,33 +70,69 @@ export function TaskItem(priority, titleText, deadline, id) {
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
+  checkbox.checked = done;
 
   const titleContainer = document.createElement("div");
   titleContainer.className = "task-title-container";
   titleContainer.appendChild(checkbox);
   titleContainer.appendChild(title);
 
-  const utilBtn = document.createElement("button");
-  const icon = document.createElement("img");
-  icon.src = BsThreeDotsVertical;
-  utilBtn.appendChild(icon);
-
   const deadlineElement = document.createElement("span");
   const dlText = document.createElement("p");
   const dlIcon = document.createElement("img");
   dlIcon.src = LuAlarmClock;
   const date = new Date(deadline);
-  dlText.textContent = format(date, "HH:mm");
+  dlText.textContent =
+    pageType === "week" ? format(date, "MMM d, HH:mm") : format(date, "HH:mm");
   deadlineElement.appendChild(dlText);
   deadlineElement.appendChild(dlIcon);
 
-  const rightContainer = document.createElement("div");
-  rightContainer.appendChild(deadlineElement);
-  rightContainer.appendChild(utilBtn);
-  rightContainer.className = "task-right-container";
-
   task.appendChild(titleContainer);
-  task.appendChild(rightContainer);
+  task.appendChild(deadlineElement);
+
+  // Add checkbox change handler
+  checkbox.addEventListener("change", (e) => {
+    e.stopPropagation();
+    const isDone = e.target.checked;
+    const toggle = { done: isDone };
+    taskService.updateTask(id, toggle);
+    if (isDone) {
+      task.classList.add("task-done");
+    } else {
+      task.classList.remove("task-done");
+    }
+    // Notify parent to update
+    if (onTaskUpdate) {
+      onTaskUpdate();
+    }
+  });
+
+  // Add click handler to show task details
+  if (taskObject) {
+    task.addEventListener("click", (e) => {
+      // Don't open modal if checkbox was clicked
+      if (e.target.type === "checkbox") {
+        return;
+      }
+      e.stopPropagation();
+      const detailModal = CreateTaskDetailModal(
+        taskObject,
+        () => {
+          detailModal.remove();
+        },
+        null,
+        (taskId) => {
+          taskService.deleteTask(taskId);
+          ShowTaskPage(pageType);
+        },
+        (taskId, isDone) => {
+          taskService.updateTask(taskId, { done: isDone });
+          ShowTaskPage(pageType);
+        }
+      );
+      document.body.appendChild(detailModal);
+    });
+  }
 
   return task;
 }
@@ -124,6 +177,23 @@ export default function ShowTaskPage(pageType = "today") {
 
   main.replaceChildren(
     header,
-    ...tasks.map((t) => TaskItem(t.priority, t.title, t.deadline, t.id))
+    ...tasks.map((t) =>
+      TaskItem(
+        t.priority,
+        t.title,
+        t.deadline,
+        t.id,
+        pageType,
+        t.done,
+        t,
+        () => {
+          // Close any open modals
+          const modals = document.querySelectorAll(".modal-overlay");
+          modals.forEach((modal) => modal.remove());
+          // Refresh the page
+          ShowTaskPage(pageType);
+        }
+      )
+    )
   );
 }

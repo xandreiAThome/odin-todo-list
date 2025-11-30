@@ -1,4 +1,4 @@
-import SideBar from "../features/sidebar/sidebar";
+import SideBar from "./features/sidebar/sidebar";
 
 export default function Page() {
   const content = document.getElementById("content");

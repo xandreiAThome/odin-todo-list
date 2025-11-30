@@ -16,7 +16,6 @@ export function CreateTaskModal(onSubmit, onCancel) {
   const closeBtn = document.createElement("button");
   closeBtn.className = "modal-close";
   closeBtn.textContent = "×";
-  closeBtn.addEventListener("click", onCancel);
 
   header.appendChild(title);
   header.appendChild(closeBtn);
@@ -121,7 +120,7 @@ export function CreateTaskModal(onSubmit, onCancel) {
   const contentTextarea = document.createElement("textarea");
   contentTextarea.placeholder = "Enter task content";
   contentTextarea.className = "modal-textarea";
-  contentTextarea.required = false;
+  contentTextarea.required = true;
 
   const buttonContainer = document.createElement("div");
   buttonContainer.className = "modal-buttons";
@@ -177,10 +176,7 @@ export function CreateTaskModal(onSubmit, onCancel) {
     }, 300);
   };
 
-  // Update close button listener
   closeBtn.addEventListener("click", closeModalWithAnimation);
-
-  // Update cancel button listener
   cancelBtn.addEventListener("click", closeModalWithAnimation);
 
   // Close modal when clicking outside

@@ -1,8 +1,8 @@
-import IoTodayOutline from "../../public/IoTodayOutline.svg";
-import BsCalendar2Week from "../../public/BsCalendar2Week.svg";
-import BiNote from "../../public/BiNote.svg";
-import ShowTaskPage from "./tasks";
-import ShowNotesPage from "./notes";
+import IoTodayOutline from "../../../public/IoTodayOutline.svg";
+import BsCalendar2Week from "../../../public/BsCalendar2Week.svg";
+import BiNote from "../../../public/BiNote.svg";
+import ShowTaskPage from "../tasks/tasks";
+import ShowNotesPage from "../notes/notes";
 
 export default function SideBar() {
   const sidebar = document.createElement("nav");
@@ -53,6 +53,22 @@ export default function SideBar() {
     closeSidebarOnMobile();
   });
 
+  sidebar.appendChild(todayNav);
+  sidebar.appendChild(weekNav);
+  sidebar.appendChild(notesNav);
+
+  const line = document.createElement("hr");
+  line.className = "line";
+  sidebar.appendChild(line);
+
+  const projectNavContainer = document.createElement("div");
+  projectNavContainer.id = "project-nav-container";
+  const projectNavHeader = document.createElement("h4");
+  projectNavHeader.textContent = "Projects";
+  projectNavContainer.appendChild(projectNavHeader);
+
+  sidebar.appendChild(projectNavContainer);
+
   function updateActiveNav(activeId) {
     document.querySelectorAll(".nav-item").forEach((item) => {
       item.classList.remove("active-nav-item");
@@ -61,25 +77,13 @@ export default function SideBar() {
   }
 
   function closeSidebarOnMobile() {
-    if (window.innerWidth < 1024) {
+    const width = window.innerWidth;
+    if (width < 1024) {
       sidebar.classList.remove("open");
-      document.querySelector(".sidebar-overlay")?.classList.remove("active");
+      const overlay = document.querySelector(".sidebar-overlay");
+      overlay.classList.remove("active");
     }
   }
 
-  const line = document.createElement("div");
-  line.className = "line";
-
-  const projectNavContainer = document.createElement("div");
-  projectNavContainer.id = "project-nav-container";
-  const projectNavText = document.createElement("h4");
-  projectNavText.textContent = "Projects";
-
-  sidebar.appendChild(todayNav);
-  sidebar.appendChild(weekNav);
-  sidebar.appendChild(notesNav);
-  sidebar.appendChild(line);
-  sidebar.appendChild(projectNavText);
-  sidebar.appendChild(projectNavContainer);
   return sidebar;
 }

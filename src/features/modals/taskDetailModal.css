@@ -1,0 +1,162 @@
+/* Task Detail Modal Styles */
+
+/* Modal title container with checkbox */
+.modal-title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.modal-title-container h2 {
+  margin: 0;
+}
+
+.modal-title-container input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Modal actions container */
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modal-action-btn {
+  background: none;
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+  color: rgb(var(--text-dark-rgb));
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.modal-action-btn:hover {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border-color: rgba(var(--text-dark-rgb), 0.5);
+}
+
+.modal-action-btn.edit-btn {
+  color: rgb(var(--primary-rgb));
+  border-color: rgb(var(--primary-rgb));
+}
+
+.modal-action-btn.edit-btn:hover {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.modal-action-btn.delete-btn {
+  color: rgb(255, 120, 120);
+  border-color: rgb(93, 26, 26);
+}
+
+.modal-action-btn.delete-btn:hover {
+  background-color: rgba(93, 26, 26, 0.2);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Metadata badges row */
+.detail-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.detail-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.detail-badge.priority-high {
+  background-color: rgba(93, 26, 26, 0.3);
+  color: rgb(255, 120, 120);
+  border: 1px solid rgb(93, 26, 26);
+}
+
+.detail-badge.priority-medium {
+  background-color: rgba(255, 108, 12, 0.2);
+  color: rgb(255, 150, 80);
+  border: 1px solid rgb(255, 108, 12);
+}
+
+.detail-badge.priority-low {
+  background-color: rgba(21, 129, 191, 0.2);
+  color: rgb(100, 180, 220);
+  border: 1px solid rgb(21, 129, 191);
+}
+
+.detail-badge.project-badge {
+  background-color: rgba(233, 227, 240, 0.1);
+  color: rgb(200, 190, 210);
+  border: 1px solid rgba(233, 227, 240, 0.3);
+}
+
+.detail-badge.status-completed {
+  background-color: rgba(21, 129, 191, 0.2);
+  color: rgb(100, 200, 220);
+  border: 1px solid rgb(21, 129, 191);
+}
+
+.detail-badge.status-pending {
+  background-color: rgba(255, 108, 12, 0.2);
+  color: rgb(255, 150, 80);
+  border: 1px solid rgb(255, 108, 12);
+}
+
+/* Deadline section */
+.detail-deadline-section {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.detail-deadline-value {
+  font-size: 0.75rem;
+  color: rgb(var(--text-dark-rgb));
+  font-weight: 500;
+}
+
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-section label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: rgb(var(--text-dark-rgb));
+}
+
+.detail-section p {
+  font-size: 1rem;
+  color: rgb(var(--text-dark-rgb));
+  margin: 0;
+  padding: 0.75rem;
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border-radius: 0.5rem;
+  word-wrap: break-word;
+}
+
+.detail-content {
+  white-space: pre-wrap;
+}
