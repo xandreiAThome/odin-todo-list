@@ -8,6 +8,18 @@ export default function SideBar() {
   const sidebar = document.createElement("nav");
   sidebar.id = "sidebar";
 
+  const homeNav = document.createElement("button");
+  homeNav.className = "nav-item";
+  homeNav.id = "home-nav";
+  const homeText = document.createElement("p");
+  homeText.textContent = "Home";
+  homeNav.appendChild(homeText);
+  homeNav.addEventListener("click", () => {
+    updateActiveNav("home-nav");
+    ShowTaskPage("all");
+    closeSidebarOnMobile();
+  });
+
   const todayNav = document.createElement("button");
   todayNav.className = "nav-item active-nav-item";
   todayNav.id = "today-nav";
@@ -53,6 +65,7 @@ export default function SideBar() {
     closeSidebarOnMobile();
   });
 
+  sidebar.appendChild(homeNav);
   sidebar.appendChild(todayNav);
   sidebar.appendChild(weekNav);
   sidebar.appendChild(notesNav);

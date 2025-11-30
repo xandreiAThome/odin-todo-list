@@ -23,6 +23,8 @@ export function TaskPageHeader(pageType = "today") {
       startDate,
       "MMM d"
     )} - ${format(endDate, "MMM d, yyyy")})`;
+  } else if (pageType === "all") {
+    headerText.textContent = "All Tasks";
   } else {
     headerText.textContent = `Today (${format(new Date(), "MMM d, yyyy")})`;
   }
@@ -81,8 +83,13 @@ export function TaskItem(
   const dlIcon = document.createElement("img");
   dlIcon.src = LuAlarmClock;
   const date = new Date(deadline);
-  dlText.textContent =
-    pageType === "week" ? format(date, "MMM d, HH:mm") : format(date, "HH:mm");
+  let dateFormat = "HH:mm";
+  if (pageType === "week") {
+    dateFormat = "MMM d, HH:mm";
+  } else if (pageType === "all") {
+    dateFormat = "PPp";
+  }
+  dlText.textContent = format(date, dateFormat);
   deadlineElement.appendChild(dlText);
   deadlineElement.appendChild(dlIcon);
 
@@ -181,6 +188,7 @@ export default function ShowTaskPage(pageType = "today") {
         })
     );
   }
+  // "all" page type shows all tasks without filtering
 
   main.replaceChildren(
     header,
