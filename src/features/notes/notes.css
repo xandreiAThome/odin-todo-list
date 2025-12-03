@@ -5,6 +5,7 @@
 }
 
 .note-card {
+  background-color: rgba(var(--text-dark-rgb), 0.12);
   border-radius: 0.5rem;
   break-inside: avoid;
   padding: 1.25rem;
@@ -12,7 +13,7 @@
   flex-direction: column;
   gap: 0.75rem;
   transition: all 0.2s ease;
-  border: 1px solid rgba(var(--accent-rgb), 0.4);
+  border: 1px solid rgba(var(--text-dark-rgb), 0.2);
   margin-bottom: 1rem;
 }
 
