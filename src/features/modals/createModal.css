@@ -8,6 +8,11 @@
   flex: 1;
 }
 
+/* Note Detail Modal Specific */
+.note-detail-form {
+  min-height: 0;
+}
+
 .modal-form label {
   font-weight: 600;
   font-size: 0.9rem;
@@ -113,7 +118,8 @@
 }
 
 .modal-submit,
-.modal-cancel {
+.modal-cancel,
+.modal-delete {
   flex: 1;
   padding: 0.75rem;
   border-radius: 0.5rem;
@@ -131,6 +137,15 @@
 
 .modal-submit:hover {
   background-color: rgba(var(--primary-rgb), 0.8);
+}
+
+.modal-delete {
+  background-color: #dc2626;
+  color: rgb(var(--text-dark-rgb));
+}
+
+.modal-delete:hover {
+  background-color: #991b1b;
 }
 
 .modal-cancel {

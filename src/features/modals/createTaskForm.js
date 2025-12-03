@@ -1,26 +1,8 @@
 import flatpickr from "flatpickr";
 import ProjectService from "../../service/project.service.js";
+import TaskService from "../../service/task.service.js";
 
-export function CreateTaskModal(onSubmit, onCancel) {
-  const modalOverlay = document.createElement("div");
-  modalOverlay.className = "modal-overlay";
-
-  const modal = document.createElement("div");
-  modal.className = "modal";
-
-  const header = document.createElement("div");
-  header.className = "modal-header";
-
-  const title = document.createElement("h2");
-  title.textContent = "Add New Task";
-
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "modal-close";
-  closeBtn.textContent = "×";
-
-  header.appendChild(title);
-  header.appendChild(closeBtn);
-
+export function CreateTaskForm(onTaskCreate) {
   const form = document.createElement("form");
   form.className = "modal-form";
 
@@ -81,7 +63,6 @@ export function CreateTaskModal(onSubmit, onCancel) {
   const dateInput = document.createElement("input");
   dateInput.type = "date";
   dateInput.required = true;
-  // Set default date to today
   const today = new Date().toISOString().split("T")[0];
   dateInput.value = today;
 
@@ -94,14 +75,12 @@ export function CreateTaskModal(onSubmit, onCancel) {
   deadlineContainer.appendChild(dateInput);
   deadlineContainer.appendChild(timeInput);
 
-  // Calculate default time (one hour from now)
   const now = new Date();
   const nextHour = new Date(now.getTime() + 60 * 60 * 1000);
   const defaultTime = `${String(nextHour.getHours()).padStart(2, "0")}:${String(
     nextHour.getMinutes()
   ).padStart(2, "0")}`;
 
-  // Initialize Flatpickr for time input
   flatpickr(timeInput, {
     enableTime: true,
     noCalendar: true,
@@ -149,44 +128,30 @@ export function CreateTaskModal(onSubmit, onCancel) {
   form.appendChild(contentTextarea);
   form.appendChild(buttonContainer);
 
+  const taskService = TaskService();
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const deadline =
       dateInput.value && timeInput.value
         ? `${dateInput.value}T${timeInput.value}`
         : null;
-    onSubmit({
+    const taskData = {
       title: titleInput.value,
       priority: prioritySelect.value,
       project: projectSelect.value,
       deadline: deadline,
       content: contentTextarea.value,
-    });
-  });
-
-  modal.appendChild(header);
-  modal.appendChild(form);
-
-  modalOverlay.appendChild(modal);
-
-  // Helper function to close modal with animation
-  const closeModalWithAnimation = () => {
-    modal.classList.add("closing");
-    modalOverlay.classList.add("closing");
-    setTimeout(() => {
-      onCancel();
-    }, 300);
-  };
-
-  closeBtn.addEventListener("click", closeModalWithAnimation);
-  cancelBtn.addEventListener("click", closeModalWithAnimation);
-
-  // Close modal when clicking outside
-  modalOverlay.addEventListener("click", (e) => {
-    if (e.target === modalOverlay) {
-      closeModalWithAnimation();
+    };
+    taskService.addTask(taskData);
+    if (onTaskCreate) {
+      onTaskCreate();
     }
   });
 
-  return modalOverlay;
+  return {
+    form,
+    submitBtn,
+    cancelBtn,
+  };
 }

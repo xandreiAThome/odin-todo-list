@@ -1,0 +1,122 @@
+/* Notes Page Styles */
+.notes-container {
+  column-width: 180px; /* preferred column width */
+  column-gap: 1rem;
+}
+
+.note-card {
+  border-radius: 0.5rem;
+  break-inside: avoid;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
+  margin-bottom: 1rem;
+}
+
+.note-card:hover {
+  background-color: rgba(var(--text-dark-rgb), 0.16);
+  border-color: rgba(var(--primary-rgb), 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.1);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.note-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgb(var(--text-dark-rgb));
+  flex: 1;
+}
+
+.note-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.note-action-btn {
+  background: none;
+  border: 1px solid rgba(var(--text-dark-rgb), 0.3);
+  color: rgb(var(--text-dark-rgb));
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.note-action-btn:hover {
+  background-color: rgba(var(--text-dark-rgb), 0.1);
+  border-color: rgba(var(--text-dark-rgb), 0.5);
+}
+
+.note-action-btn.edit-btn {
+  color: rgb(var(--primary-rgb));
+  border-color: rgb(var(--primary-rgb));
+}
+
+.note-action-btn.edit-btn:hover {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.note-action-btn.delete-btn {
+  color: rgb(255, 120, 120);
+  border-color: rgb(93, 26, 26);
+}
+
+.note-action-btn.delete-btn:hover {
+  background-color: rgba(93, 26, 26, 0.2);
+}
+
+.note-content {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(var(--text-dark-rgb), 0.9);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(var(--text-dark-rgb), 0.1);
+}
+
+.note-project {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  background-color: rgba(var(--primary-rgb), 0.2);
+  color: rgb(var(--primary-rgb));
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Notes grid layout */
+.notes-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+}

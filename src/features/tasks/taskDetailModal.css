@@ -160,3 +160,25 @@
 .detail-content {
   white-space: pre-wrap;
 }
+
+/* Task view section (read-only) */
+.task-view-section {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.task-view-section.active {
+  display: flex;
+}
+
+/* Task edit form */
+.task-edit-form {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.task-edit-form.active {
+  display: flex;
+}

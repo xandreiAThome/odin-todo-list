@@ -6,8 +6,8 @@ import {
   isWithinInterval,
 } from "date-fns";
 import LuAlarmClock from "../../../public/LuAlarmClock.svg";
-import { CreateTaskModal } from "../modals/createTaskModal.js";
-import { CreateTaskDetailModal } from "../modals/taskDetailModal";
+import { CreateModal } from "../modals/createModal.js";
+import { CreateTaskDetailModal } from "./taskDetailModal.js";
 import TaskServce from "../../service/task.service.js";
 
 export function TaskPageHeader(pageType = "today") {
@@ -125,10 +125,12 @@ export function TaskItem(
         taskObject,
         () => {
           detailModal.remove();
+          ShowTaskPage(pageType);
         },
         null,
         (taskId) => {
           taskService.deleteTask(taskId);
+          detailModal.remove();
           ShowTaskPage(pageType);
         },
         (taskId, isDone) => {
@@ -158,16 +160,9 @@ export default function ShowTaskPage(pageType = "today") {
 
   const actionBtn = header.querySelector("#action-btn");
   actionBtn.addEventListener("click", () => {
-    const modal = CreateTaskModal(
-      (taskData) => {
-        taskService.addTask(taskData);
-        modal.remove();
-        ShowTaskPage(pageType);
-      },
-      () => {
-        modal.remove();
-      }
-    );
+    const modal = CreateModal(() => {
+      ShowTaskPage(pageType);
+    });
     document.body.appendChild(modal);
   });
 
