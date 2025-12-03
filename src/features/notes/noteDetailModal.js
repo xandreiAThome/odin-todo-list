@@ -77,7 +77,6 @@ export function NoteDetailModal(note, onClose) {
 
   const noteService = NoteService();
 
-  // Handle close modal with animation
   const closeModalWithAnimation = () => {
     modal.classList.add("closing");
     modalOverlay.classList.add("closing");
@@ -89,14 +88,12 @@ export function NoteDetailModal(note, onClose) {
     }, 300);
   };
 
-  // Edit button - switch to edit mode
   editBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     switchToEditMode();
   });
 
-  // Delete button
   deleteBtn.addEventListener("click", () => {
     const confirm = window.confirm(
       `Are you sure you want to delete "${note.title}"?`
@@ -107,22 +104,16 @@ export function NoteDetailModal(note, onClose) {
     }
   });
 
-  // Close button
   closeBtn.addEventListener("click", closeModalWithAnimation);
 
-  // Close modal when clicking outside
   modalOverlay.addEventListener("click", (e) => {
     if (e.target === modalOverlay) {
       closeModalWithAnimation();
     }
   });
 
-  // Switch to edit mode
   const switchToEditMode = () => {
-    // Hide view section
     viewSection.classList.remove("active");
-
-    // Create form
     const form = document.createElement("form");
     form.className = "modal-form note-detail-form active";
 
@@ -191,13 +182,9 @@ export function NoteDetailModal(note, onClose) {
       closeModalWithAnimation();
     });
 
-    // Cancel edit
     cancelBtn.addEventListener("click", () => {
-      // Hide form
       form.classList.remove("active");
-      // Show view section
       viewSection.classList.add("active");
-      // Show edit button
       editBtn.style.display = "block";
     });
 
