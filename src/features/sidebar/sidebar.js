@@ -3,25 +3,28 @@ import BsCalendar2Week from "../../../public/BsCalendar2Week.svg";
 import BiNote from "../../../public/BiNote.svg";
 import ShowTaskPage from "../tasks/tasks";
 import ShowNotesPage from "../notes/notes";
+import ProjectService from "../../service/project.service.js";
+import { CreateModal } from "../modals/createModal.js";
+import { ShowProjectContent } from "../projects/projects.js";
 
 export default function SideBar() {
   const sidebar = document.createElement("nav");
   sidebar.id = "sidebar";
 
   const homeNav = document.createElement("button");
-  homeNav.className = "nav-item";
+  homeNav.className = "nav-item active-nav-item";
   homeNav.id = "home-nav";
   const homeText = document.createElement("p");
   homeText.textContent = "Home";
   homeNav.appendChild(homeText);
   homeNav.addEventListener("click", () => {
-    updateActiveNav("home-nav");
+    updateActiveNav(homeNav);
     ShowTaskPage("all");
     closeSidebarOnMobile();
   });
 
   const todayNav = document.createElement("button");
-  todayNav.className = "nav-item active-nav-item";
+  todayNav.className = "nav-item";
   todayNav.id = "today-nav";
   const todayText = document.createElement("p");
   todayText.textContent = "Today";
@@ -30,7 +33,7 @@ export default function SideBar() {
   todayNav.appendChild(todayImg);
   todayNav.appendChild(todayText);
   todayNav.addEventListener("click", () => {
-    updateActiveNav("today-nav");
+    updateActiveNav(todayNav);
     ShowTaskPage();
     closeSidebarOnMobile();
   });
@@ -45,7 +48,7 @@ export default function SideBar() {
   weekNav.appendChild(weekImg);
   weekNav.appendChild(weekText);
   weekNav.addEventListener("click", () => {
-    updateActiveNav("week-nav");
+    updateActiveNav(weekNav);
     ShowTaskPage("week");
     closeSidebarOnMobile();
   });
@@ -60,7 +63,7 @@ export default function SideBar() {
   notesNav.appendChild(notesImg);
   notesNav.appendChild(notesText);
   notesNav.addEventListener("click", () => {
-    updateActiveNav("notes-nav");
+    updateActiveNav(notesNav);
     ShowNotesPage();
     closeSidebarOnMobile();
   });
@@ -82,11 +85,182 @@ export default function SideBar() {
 
   sidebar.appendChild(projectNavContainer);
 
-  function updateActiveNav(activeId) {
+  // Populate projects
+  const projectService = ProjectService();
+
+  function updateProjectsList() {
+    // Remove all project nav items except the header
+    while (projectNavContainer.children.length > 1) {
+      projectNavContainer.removeChild(projectNavContainer.lastChild);
+    }
+
+    // Re-fetch and render projects
+    const projects = projectService.getProjects();
+    projects.forEach((project) => {
+      const projectItemWrapper = document.createElement("div");
+      projectItemWrapper.className = "project-item-wrapper";
+      projectItemWrapper.dataset.projectId = project.id;
+
+      const projectNav = document.createElement("button");
+      projectNav.className = "nav-item project-nav-item";
+      projectNav.dataset.projectId = project.id;
+      projectNav.textContent = project.name;
+      projectNav.addEventListener("click", () => {
+        // Don't navigate if we're in edit mode
+        if (!projectItemWrapper.classList.contains("editing")) {
+          updateActiveNav(projectNav);
+          ShowProjectContent(project.id);
+          closeSidebarOnMobile();
+        }
+      });
+
+      projectItemWrapper.appendChild(projectNav);
+
+      // Add hamburger menu for non-General projects
+      if (project.name !== "General") {
+        const menuBtn = document.createElement("button");
+        menuBtn.className = "project-menu-btn";
+        menuBtn.textContent = "⋮";
+        menuBtn.title = "Project options";
+
+        const menu = document.createElement("div");
+        menu.className = "project-menu";
+
+        const editBtn = document.createElement("button");
+        editBtn.className = "project-menu-item edit-item";
+        editBtn.textContent = "Edit";
+        editBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          menu.classList.remove("active");
+          startEditingProject(projectItemWrapper, project, projectNav);
+        });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "project-menu-item delete-item";
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          menu.classList.remove("active");
+          deleteProject(project);
+        });
+
+        menu.appendChild(editBtn);
+        menu.appendChild(deleteBtn);
+
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          // Close other open menus
+          document.querySelectorAll(".project-menu.active").forEach((m) => {
+            if (m !== menu) {
+              m.classList.remove("active");
+            }
+          });
+          menu.classList.toggle("active");
+        });
+
+        projectItemWrapper.appendChild(menuBtn);
+        projectItemWrapper.appendChild(menu);
+      }
+
+      projectNavContainer.appendChild(projectItemWrapper);
+    });
+  }
+
+  function startEditingProject(wrapper, project, projectNav) {
+    wrapper.classList.add("editing");
+
+    // Hide the original nav button
+    projectNav.style.display = "none";
+
+    // Create input container
+    const inputContainer = document.createElement("div");
+    inputContainer.className = "project-edit-container";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "project-edit-input";
+    input.value = project.name;
+    input.maxLength = 50;
+
+    const saveBtn = document.createElement("button");
+    saveBtn.className = "project-edit-btn save-btn";
+    saveBtn.textContent = "✓";
+    saveBtn.title = "Save";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.className = "project-edit-btn cancel-btn";
+    cancelBtn.textContent = "✕";
+    cancelBtn.title = "Cancel";
+
+    const finishEditing = () => {
+      inputContainer.remove();
+      projectNav.style.display = "";
+      wrapper.classList.remove("editing");
+    };
+
+    saveBtn.addEventListener("click", () => {
+      const newName = input.value.trim();
+      if (newName && newName !== project.name) {
+        projectService.updateProject(project.id, { name: newName });
+        updateProjectsList();
+      } else {
+        finishEditing();
+      }
+    });
+
+    cancelBtn.addEventListener("click", finishEditing);
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        saveBtn.click();
+      } else if (e.key === "Escape") {
+        cancelBtn.click();
+      }
+    });
+
+    inputContainer.appendChild(input);
+    inputContainer.appendChild(saveBtn);
+    inputContainer.appendChild(cancelBtn);
+
+    // Insert after the project nav button
+    projectNav.parentNode.insertBefore(inputContainer, projectNav.nextSibling);
+
+    // Focus and select the input
+    input.focus();
+    input.select();
+  }
+
+  // Close menus when clicking elsewhere
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".project-menu.active").forEach((menu) => {
+      menu.classList.remove("active");
+    });
+  });
+
+  function deleteProject(project) {
+    if (confirm(`Delete project "${project.name}"?`)) {
+      projectService.deleteProject(project.id);
+      updateProjectsList();
+    }
+  }
+
+  // Expose to window for external access
+  window.updateProjectsList = updateProjectsList;
+
+  // Initial population
+  updateProjectsList();
+
+  function updateActiveNav(activeElement) {
     document.querySelectorAll(".nav-item").forEach((item) => {
       item.classList.remove("active-nav-item");
     });
-    document.getElementById(activeId).classList.add("active-nav-item");
+    if (activeElement.id) {
+      document
+        .getElementById(activeElement.id)
+        .classList.add("active-nav-item");
+    } else {
+      activeElement.classList.add("active-nav-item");
+    }
   }
 
   function closeSidebarOnMobile() {

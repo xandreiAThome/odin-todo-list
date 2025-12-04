@@ -35,9 +35,11 @@ export function CreateProjectForm(onProjectCreate) {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    projectService.createProject({
-      name: nameInput.value,
-    });
+    projectService.addProject(nameInput.value);
+    // Update sidebar project list whenever a project is created
+    if (window.updateProjectsList) {
+      window.updateProjectsList();
+    }
     if (onProjectCreate) {
       onProjectCreate();
     }

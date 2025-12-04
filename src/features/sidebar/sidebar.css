@@ -36,6 +36,157 @@
 #project-nav-container {
   width: 100%;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#project-nav-container h4 {
+  margin: 0.5rem 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: rgb(var(--text-dark-rgb));
+  font-weight: 600;
+}
+
+.project-nav-item {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.project-item-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.project-item-wrapper .project-nav-item {
+  flex: 1;
+}
+
+.project-item-wrapper.editing {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.project-item-wrapper.editing .project-menu-btn {
+  display: none;
+}
+
+.project-item-wrapper.editing .project-menu {
+  display: none !important;
+}
+
+.project-menu-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  color: rgb(var(--text-dark-rgb));
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.project-menu-btn:hover {
+  background-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.project-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: rgb(var(--background-rgb));
+  border: 1px solid rgba(var(--text-dark-rgb), 0.2);
+  border-radius: 0.5rem;
+  flex-direction: column;
+  gap: 0;
+  min-width: 120px;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.project-menu.active {
+  display: flex;
+}
+
+.project-menu-item {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  color: rgb(var(--text-dark-rgb));
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+  border-radius: 0;
+}
+
+.project-menu-item:first-child {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.project-menu-item:last-child {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.project-menu-item:hover {
+  background-color: rgba(var(--primary-rgb), 0.15);
+}
+
+.project-edit-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.25rem 0;
+}
+
+.project-edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid rgba(var(--primary-rgb), 0.5);
+  border-radius: 0.25rem;
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: rgb(var(--text-dark-rgb));
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.project-edit-input:focus {
+  outline: none;
+  border-color: rgb(var(--primary-rgb));
+  background-color: rgba(var(--primary-rgb), 0.15);
+}
+
+.project-edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  color: rgb(var(--text-dark-rgb));
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.project-edit-btn:hover {
+  background-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.project-edit-btn.save-btn {
+  color: #10b981;
+}
+
+.project-edit-btn.cancel-btn {
+  color: #ef4444;
 }
 
 /* Mobile Sidebar Drawer */

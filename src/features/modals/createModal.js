@@ -1,6 +1,6 @@
-import { CreateTaskForm } from "./createTaskForm.js";
-import { CreateNoteForm } from "./createNoteForm.js";
-import { CreateProjectForm } from "./createProjectForm.js";
+import { CreateTaskForm } from "../tasks/createTaskForm.js";
+import { CreateNoteForm } from "../notes/createNoteForm.js";
+import { CreateProjectForm } from "../projects/createProjectForm.js";
 import { CreateModalTabs } from "./createModalTabs.js";
 
 export function CreateModal(onClose) {

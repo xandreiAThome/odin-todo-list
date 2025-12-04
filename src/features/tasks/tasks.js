@@ -145,9 +145,15 @@ export function TaskItem(
   return task;
 }
 
-export default function ShowTaskPage(pageType = "today") {
+export default function ShowTaskPage(pageType = "today", projectId = null) {
   const main = document.getElementById("main-content");
-  const header = TaskPageHeader(pageType);
+
+  // If being called from project view, append to existing container
+  const container = projectId
+    ? document.getElementById("project-content-container")
+    : main;
+
+  const header = !projectId ? TaskPageHeader(pageType) : null;
   const taskService = TaskServce();
 
   const renderTask = () => {
@@ -155,38 +161,45 @@ export default function ShowTaskPage(pageType = "today") {
     const modals = document.querySelectorAll(".modal-overlay");
     modals.forEach((modal) => modal.remove());
     // Refresh the page
-    ShowTaskPage(pageType);
+    ShowTaskPage(pageType, projectId);
   };
 
-  const actionBtn = header.querySelector("#action-btn");
-  actionBtn.addEventListener("click", () => {
-    const modal = CreateModal(() => {
-      ShowTaskPage(pageType);
+  if (header) {
+    const actionBtn = header.querySelector("#action-btn");
+    actionBtn.addEventListener("click", () => {
+      const modal = CreateModal(() => {
+        ShowTaskPage(pageType, projectId);
+      });
+      document.body.appendChild(modal);
     });
-    document.body.appendChild(modal);
-  });
+  }
 
   let tasks = taskService.getTasks();
 
-  // Filter tasks based on page type
-  if (pageType === "today") {
-    tasks = tasks.filter((t) => t.deadline && isToday(new Date(t.deadline)));
-  } else if (pageType === "week") {
-    const startDate = startOfWeek(new Date());
-    const endDate = addDays(startDate, 6);
-    tasks = tasks.filter(
-      (t) =>
-        t.deadline &&
-        isWithinInterval(new Date(t.deadline), {
-          start: startDate,
-          end: endDate,
-        })
-    );
+  // Filter by project if specified
+  if (projectId) {
+    tasks = tasks.filter((t) => t.project === projectId);
+  } else {
+    // Filter tasks based on page type
+    if (pageType === "today") {
+      tasks = tasks.filter((t) => t.deadline && isToday(new Date(t.deadline)));
+    } else if (pageType === "week") {
+      const startDate = startOfWeek(new Date());
+      const endDate = addDays(startDate, 6);
+      tasks = tasks.filter(
+        (t) =>
+          t.deadline &&
+          isWithinInterval(new Date(t.deadline), {
+            start: startDate,
+            end: endDate,
+          })
+      );
+    }
   }
   // "all" page type shows all tasks without filtering
 
-  main.replaceChildren(
-    header,
+  const content = [
+    ...(header ? [header] : []),
     ...tasks.map((t) =>
       TaskItem(
         t.priority,
@@ -198,8 +211,14 @@ export default function ShowTaskPage(pageType = "today") {
         t,
         renderTask
       )
-    )
-  );
+    ),
+  ];
+
+  if (projectId) {
+    container.replaceChildren(...content);
+  } else {
+    main.replaceChildren(...content);
+  }
 }
 
 function renderTask() {

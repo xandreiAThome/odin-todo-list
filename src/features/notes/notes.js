@@ -63,30 +63,47 @@ function NoteComponent(note, onNoteUpdated) {
   return noteCard;
 }
 
-export default function ShowNotesPage() {
+export default function ShowNotesPage(pageType = "all", projectId = null) {
   const main = document.getElementById("main-content");
-  const header = NotesPageHeader();
+
+  // If being called from project view, append to existing container
+  const targetContainer = projectId
+    ? document.getElementById("project-content-container")
+    : main;
+
+  const header = !projectId ? NotesPageHeader() : null;
   const container = document.createElement("div");
   container.className = "notes-container";
   const noteService = NoteService();
 
-  const actionBtn = header.querySelector("#action-btn");
-  actionBtn.addEventListener("click", () => {
-    const modal = CreateModal(() => {
-      ShowNotesPage();
+  if (header) {
+    const actionBtn = header.querySelector("#action-btn");
+    actionBtn.addEventListener("click", () => {
+      const modal = CreateModal(() => {
+        ShowNotesPage(pageType, projectId);
+      });
+      document.body.appendChild(modal);
     });
-    document.body.appendChild(modal);
-  });
+  }
 
-  const notes = noteService.getNotes();
+  let notes = noteService.getNotes();
+
+  // Filter by project if specified
+  if (projectId) {
+    notes = notes.filter((n) => n.projectId === projectId);
+  }
 
   container.replaceChildren(
     ...notes.map((note) =>
       NoteComponent(note, () => {
-        ShowNotesPage();
+        ShowNotesPage(pageType, projectId);
       })
     )
   );
 
-  main.replaceChildren(header, container);
+  if (projectId) {
+    targetContainer.replaceChildren(container);
+  } else {
+    main.replaceChildren(header, container);
+  }
 }
